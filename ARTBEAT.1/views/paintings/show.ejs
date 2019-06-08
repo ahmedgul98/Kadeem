@@ -1,0 +1,52 @@
+<% include ../partials/header %>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <p class="lead">KADEEM</p>
+        </div>
+        <div class="col-md-9">
+            <div class="thumbnail">
+                <img class="img-responsive" src="<%= painting.image %>">
+                <div class="caption-full">
+                    <h4 class="pull-right">$<%= painting.price %></h4>
+                    <h4><%=painting.name%></h4>
+                    <p><%= painting.description %></p>
+                    <p>
+                        <em>Posted By: <%= painting.author.username %></em>
+                    </p>
+                    <% if(currentUser && painting.author.id.equals(currentUser._id) ){%>
+                    <a class="btn btn-primary" href="/paintings/<%=painting._id%>/edit">EDIT</a>
+                    <form id="delete-form" action="/paintings/<%=painting._id%>?_method=DELETE" method="POST">
+                        <button class="btn btn-danger">DELETE</button>
+                    </form>
+                    <% } %>
+                </div>
+            </div>
+            <div class="well">
+                <div class="text-right">
+                    <a class="btn btn-success" href="/paintings/<%= painting._id %>/comments/new">Add New Comment</a>
+                </div>
+                <hr>
+                <% painting.comments.forEach(function(comment){ %>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <strong><%= comment.author.username %></strong>
+                            <!--<span class="pull-right">10 days ago</span>-->
+                            <p>
+                                <%= comment.text %> 
+                            </p>
+                                <% if(currentUser && comment.author.id.equals(currentUser._id) ){%>
+                                <a class="btn btn-xs btn-primary" href="/paintings/<%=painting._id%>/comments/<%=comment._id%>/edit">EDIT</a>
+                                <form id="delete-form" action="/paintings/<%=painting._id%>/comments/<%=comment._id%>?_method=DELETE" method="POST">
+                                    <button class="btn btn-xs btn-danger">DELETE</button>
+                                </form>
+                                <% } %>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<% include ../partials/footer %>
